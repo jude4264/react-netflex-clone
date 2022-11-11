@@ -1,6 +1,7 @@
 import axios from '../api/axios';
 import React, { useEffect, useState } from 'react'
 import "./Row.css"
+import MovieModal from './MovieModal/MovieModal';
 
 const Row = ({
     title,
@@ -10,6 +11,10 @@ const Row = ({
 }) => {
     
     const [movies, setMovies] = useState([])
+    const [modalOpen, setmodalOpen] = useState(false)
+    const [movieSelected, setmovieSelected] = useState({})
+
+
     useEffect(() => {
       fetchMovieData();
     }, [])
@@ -21,6 +26,11 @@ const Row = ({
         // console.log(req);
         setMovies(req.data.results)
 
+    }
+
+    const handleClick=(movie)=>{
+        setmodalOpen(true)
+        setmovieSelected(movie)
     }
 
     return (
@@ -43,6 +53,7 @@ const Row = ({
                             src={`https://image.tmdb.org/t/p/original/${isLargeRow ? movie.poster_path : movie.backdrop_path
                                 } `}
                             alt={movie.name}
+                            onClick={()=>handleClick(movie)}
                         />
                     ))}
                 </div>
@@ -55,8 +66,10 @@ const Row = ({
                         {">"}
                     </span>
                 </div>
-
             </div>
+                        {modalOpen && (
+                            <MovieModal {...movieSelected} setmodalOpen={setmodalOpen}/>
+                        )}
         </section>
     )
 }
