@@ -1,6 +1,7 @@
 import request from './api/request';
 import './App.css';
 import Banner from './components/Banner';
+import Footer from './components/Footer';
 import Nav from './components/Nav';
 import Row from './components/Row';
 
@@ -35,6 +36,8 @@ function App() {
        id="CM"
        fetchUrl={request.fetchComedyMovies}
       />
+
+      <Footer/>
     </div>
   );
 }
