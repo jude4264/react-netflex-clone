@@ -30,8 +30,9 @@
 
 .movie__column-poster{
     cursor: pointer;
-    transition: transform 0.3s;
+    /* transition: transform 0.3s; */
     -webkit-transform: transform 0.3s;
+    transform : transform 0.3s;
 }
 
 

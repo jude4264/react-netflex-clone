@@ -1,11 +1,15 @@
+/* eslint-disable array-callback-return */
 import axios from '../../api/axios';
 import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import './SearchPage.css'
+import { useDebounce } from '../../hooks/useDebounce';
 
 const SearchPage = () => {
 
     // console.log("useLocation()", useLocation());
+
+    const navigate = useNavigate();
 
     const [searchResults, setsearchResults] = useState([])
     
@@ -16,16 +20,20 @@ const SearchPage = () => {
     let query = useQuery()
     const searchTerm = query.get("p")
 
+    const debounceValueSearchTerm = useDebounce(searchTerm, 500);
+
 
     useEffect(() => {
 
-        if(searchTerm){
-            fetchDearchMovie(searchTerm);
+        if(debounceValueSearchTerm){
+            fetchDearchMovie(debounceValueSearchTerm);
         }
  
-    }, [searchTerm])
+    }, [debounceValueSearchTerm])
 
     const fetchDearchMovie = async (searchTerm) => {
+
+        console.log("searchTerm" , searchTerm);
 
         try {
             const req = await axios.get(
@@ -48,8 +56,10 @@ const SearchPage = () => {
                     const movieImageUrl = 
                     "http://image.tmdb.org/t/p/w500"+ movie.backdrop_path
                     return(
-                        <div className='movie'>
-                            <div className='movie__column-poster'>
+                        <div className='movie' key={movie.id}>
+                            <div 
+                            className='movie__column-poster'
+                            onClick={()=>navigate(`/${movie.id}`)}>
                             <img
                                 src = {movieImageUrl}
                                 alt="movie"
@@ -67,7 +77,7 @@ const SearchPage = () => {
             <section className='no-results'>
                 <div className='no-results__text'>
                 <p>
-                    찾고자하는 검색어 "{searchTerm}"에 맞는 영화가 없습니다. 
+                    찾고자하는 검색어 "{debounceValueSearchTerm}"에 맞는 영화가 없습니다. 
                 </p>
 
                 </div>

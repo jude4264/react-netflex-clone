@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useRef } from 'react'
+import useOnClickOutside from '../../hooks/useOnClickOutside';
 import './Moviemodal.css'
 
 function MovieModal({
@@ -12,10 +13,15 @@ function MovieModal({
     setmodalOpen
 }) {
 
+    const ref = useRef();
+    useOnClickOutside(ref, ()=>{
+        setmodalOpen(false)
+    })
+
     return (
         <div className="presentation">
             <div className="wrapper-modal">
-                <div className="modal">
+                <div className="modal" ref={ref}>
                     <span onClick={() => setmodalOpen(false)} className="modal-close">
                         X
                     </span>
